@@ -13,6 +13,7 @@
     "antd": "^5.22.4",
     "preact": "^10.25.0",
     "react-redux": "^9.2.0",
+    "react-router-dom": "^6.27.0",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
