@@ -1,6 +1,6 @@
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
-import { Space, Typography } from "antd";
+import { Flex, Image, Space, Typography } from "antd";
 const { Text, Link } = Typography;
 import {
   StlyeNameProduct,
@@ -11,38 +11,49 @@ import {
 } from "./style";
 import { StarFilled } from "@ant-design/icons";
 import { Button, Rate } from "antd";
+import Title from "antd/es/typography/Title";
+import { getDiscountValue } from "../../comma/utils";
 
-function CardComponent() {
+function CardComponent({ book }) {
+  console.log(book);
   return (
     <Card
       hoverable
-      style={{ width: 200, padding: "10px" }}
-      cover={
-        <img
-          alt="example"
-          src="https://salt.tikicdn.com/cache/750x750/ts/product/2e/ae/d3/2e400bbfda127802bf5fd46f86ead538.jpg.webp"
-        />
-      }
+      style={{ padding: "10px", height: "450px" }}
+      cover={<img alt="example" src={book?.image_url} />}
     >
-      {" "}
-      <Text type="secondary">Nguyễn Nhật Ánh</Text>
-      <StlyeNameProduct> Tôi thấy hoa vàng trên cỏ xanh</StlyeNameProduct>
-      <WrapperReportText>
+      <Text type="secondary">{book?.author}</Text>
+      <StlyeNameProduct> {book.title}</StlyeNameProduct>
+      {/* <WrapperReportText>
         <span>
-          {/* <StyledRate
-            style={{ fontSize: "12px", margin: 0 }}
-            disabled
-            defaultValue={2}
-          /> */}
           4.8
           <StarFilled
             style={{ fontSize: "10px", color: "yellow" }}
           ></StarFilled>
         </span>
         <span>| Da ban 1000+</span>
-      </WrapperReportText>
+      </WrapperReportText> */}
       <WrapperPriceText>
-        1.000.000d <WrapperDiscountText>-5%</WrapperDiscountText>
+        <Flex align="center" justify="space-between">
+          <Flex vertical gap={0}>
+            <Title level={4} style={{ color: "#DC2626", margin: 0 }}>
+              đ{Number(book.price).toLocaleString("VN-vi")}
+            </Title>
+            <Title
+              level={5}
+              style={{
+                color: "rgb(156, 163, 175)",
+                textDecoration: "line-through",
+                margin: 0,
+              }}
+            >
+              đ{Number(book.value).toLocaleString("VN-vi")}
+            </Title>
+          </Flex>
+          <WrapperDiscountText style={{ padding: "6px 12px" }}>
+            - {getDiscountValue(book.value, book.price)}%
+          </WrapperDiscountText>
+        </Flex>
       </WrapperPriceText>
     </Card>
   );

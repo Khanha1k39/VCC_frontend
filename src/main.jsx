@@ -4,9 +4,18 @@ import { App } from "./app.jsx";
 import "antd/dist/reset.css";
 import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
+
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>,
+
   document.getElementById("app")
 );

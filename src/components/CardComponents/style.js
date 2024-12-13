@@ -21,9 +21,12 @@ export const WrapperPriceText = styled.div`
   margin: 6px 0 0px;
 `;
 export const WrapperDiscountText = styled.span`
-  color: rgb(255, 66, 78);
+  background-color: rgb(255, 66, 78);
+  color:white
   font-size: 12px;
   font-weight: 500;
+  border-radius: 20px;
+    color: white;
 `;
 export const StyledRate = styled(Rate)`
   font-size: 12px;
