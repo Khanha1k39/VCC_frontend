@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import OrderPage from "../pages/OrderPage/OrderPage";
 import ProductDetail from "../pages/Product/Product";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import SignInPage from "../pages/SignInPage/SigninPage";
 import SignUpPage from "../pages/SignUpPage/SignupPage";
 
@@ -33,6 +34,11 @@ export const routes = [
     isShowHeader: true,
   },
   {
+    path: "/profile",
+    page: ProfilePage,
+    isShowHeader: true,
+  },
+  {
     path: "/product-detail",
     page: ProductDetail,
     isShowHeader: true,
@@ -40,7 +46,7 @@ export const routes = [
   {
     path: "/system/admin",
     page: AdminPage,
-    isShowHeader: false,
+    isShowHeader: true,
     isPrivate: true,
   },
   {

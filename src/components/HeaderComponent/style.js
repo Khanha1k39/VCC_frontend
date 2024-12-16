@@ -5,6 +5,11 @@ export const WrapperHeader = styled(Row)`
   background-color: rgb(26, 148, 255);
   align-items: center;
 `;
+export const WrapperHeaderAdmin = styled(Row)`
+  padding: 20px 120px;
+  background-color: rgb(26, 148, 255);
+  align-items: center;
+`;
 export const WrapperTextHeader = styled.span`
   font-size: 18px;
   color: #fff;

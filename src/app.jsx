@@ -10,12 +10,16 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { axiosJWT, getDetailUser, refreshToken } from "./services/UserServices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isJsonString } from "./comma/utils";
 import { updateUser } from "./redux/slides/userSlide";
+import HeaderAdminPage from "./components/HeaderComponent/HeaderAdminPage";
+import HeaderComponent from "./components/HeaderComponent/HeaderComponent";
 export function App() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   useEffect(() => {
+    console.log("user", user);
     let { storageData, decoded } = handleDecoded();
     console.log("storeage", storageData);
     console.log("decoded", decoded);
@@ -63,12 +67,17 @@ export function App() {
           {routes.map((route, i) => {
             const Page = route.page;
             const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+            const isCheckAuth = !route.isPrivate || user.isAdmin;
+            route.isPrivate === true &&
+              console.log(isCheckAuth === false ? route.path : "");
             return (
               <Route
                 key={route.path}
                 path={route.path}
                 element={
-                  <Layout>
+                  <Layout
+                    Header={route.isPrivate ? HeaderAdminPage : HeaderComponent}
+                  >
                     <Page />
                   </Layout>
                 }

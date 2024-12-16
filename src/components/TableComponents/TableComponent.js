@@ -1,46 +1,6 @@
 import { Divider, Radio, Table } from "antd";
 import { useState } from "preact/hooks";
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-  },
-];
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Disabled User",
-    age: 99,
-    address: "Sydney No. 1 Lake Park",
-  },
-];
+import Loading from "../LoadingComponent/Loading";
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
@@ -58,17 +18,27 @@ const rowSelection = {
   }),
 };
 function TableComponent(props) {
-  const { selectionType = "checkbox" } = props;
+  const {
+    selectionType = "checkbox",
+    data = [],
+    columns = [],
+    isLoading = false,
+    option = {},
+  } = props;
+
   return (
     <div style={{ marginTop: "20px" }}>
-      <Table
-        rowSelection={{
-          type: selectionType,
-          ...rowSelection,
-        }}
-        columns={columns}
-        dataSource={data}
-      />
+      <Loading isLoading={isLoading}>
+        <Table
+          rowSelection={{
+            type: selectionType,
+            ...rowSelection,
+          }}
+          {...option}
+          columns={columns}
+          dataSource={data}
+        />
+      </Loading>
     </div>
   );
 }

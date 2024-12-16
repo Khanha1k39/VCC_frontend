@@ -31,3 +31,10 @@ export const logout = async () => {
     withCredentials: true,
   });
 };
+export const updateUser = async (id, data, access_token) => {
+  const res = await axiosJWT.put(`${API_URL}/user/update-user`, data, {
+    headers: {
+      token: `Beare ${access_token}`,
+    },
+  });
+};

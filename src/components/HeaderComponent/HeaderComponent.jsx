@@ -16,31 +16,49 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../services/UserServices";
 import { resetUser } from "../../redux/slides/userSlide";
 import { Navigate, useNavigate } from "react-router-dom";
-const items = [
-  {
-    key: "1",
-    label: <span>Thông tin người dùng</span>,
-  },
-  {
-    key: "2",
-    label: <span>Đăng xuất</span>,
-  },
-];
-const content = (
-  <div>
-    <p>Thông tin người dùng</p>
-    <p>Đăng xuất</p>
-  </div>
-);
+
 function HeaderComponent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  console.log(user);
+
+  const items =
+    (user.isAdmin == true) == false
+      ? [
+          {
+            key: "1",
+            label: <span>Thông tin người dùng</span>,
+          },
+          {
+            key: "2",
+            label: <span>Đăng xuất</span>,
+          },
+        ]
+      : [
+          {
+            key: "1",
+            label: <span>Thông tin người dùng</span>,
+          },
+          {
+            key: "3",
+            label: <span>Quản lý hệ thống</span>,
+          },
+          {
+            key: "2",
+            label: <span>Đăng xuất</span>,
+          },
+        ];
+  console.log("is admin", user.isAdmin, items);
+
   return (
     <WrapperHeader gutter={16}>
       <Col span={6}>
-        <WrapperTextHeader>KhanhBanSach</WrapperTextHeader>
+        <WrapperTextHeader
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          KhanhBanSach
+        </WrapperTextHeader>
       </Col>
       <Col span={12}>
         <Search
@@ -67,6 +85,9 @@ function HeaderComponent() {
                     if (e?.key == 2) {
                       await logout();
                       dispatch(resetUser());
+                    }
+                    if (e?.key == 3) {
+                      navigate("/system/admin");
                     }
                   },
                 }}

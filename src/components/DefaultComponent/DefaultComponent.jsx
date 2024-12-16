@@ -1,6 +1,7 @@
 import HeaderComponent from "../HeaderComponent/HeaderComponent";
 
-function DefaultComponent({ children }) {
+function DefaultComponent({ children, Header }) {
+  console.log(Header);
   return (
     <>
       <div
@@ -13,7 +14,7 @@ function DefaultComponent({ children }) {
           marginBottom: "30px",
         }}
       >
-        <HeaderComponent></HeaderComponent>{" "}
+        <Header></Header>
       </div>
       <div style={{ marginTop: "80px" }}>{children}</div>
     </>

@@ -18,7 +18,7 @@ function CardComponent({ book }) {
   return (
     <Card
       hoverable
-      style={{ padding: "10px", height: "450px" }}
+      style={{ padding: "20px", height: "450px" }}
       cover={<img alt="example" src={book?.image_url} />}
     >
       <Text type="secondary">{book?.author}</Text>

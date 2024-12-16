@@ -78,7 +78,7 @@ function AdminPage() {
     <Flex gap={16}>
       <Menu
         mode="inline"
-        defaultSelectedKeys={["22"]}
+        defaultSelectedKeys={"user"}
         openKeys={stateOpenKeys}
         onOpenChange={onOpenChange}
         style={{ width: 256, boxShadow: "1px 1px 2px #ccc", height: "100vh" }}
