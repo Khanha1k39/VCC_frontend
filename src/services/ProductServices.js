@@ -2,8 +2,12 @@ import axios from "axios";
 import { API_URL } from "../config";
 import { axiosJWT } from "./UserServices";
 
-export const getAllProduct = async () => {
-  const res = await axios.get(`${API_URL}/product/get-all`);
+export const getAllProduct = async (page = 1) => {
+  const res = await axios.get(`${API_URL}/product/get-all`, {
+    params: { page },
+  });
+  console.log("page 1", res.data);
+
   return res.data;
 };
 export const createProduct = async (data) => {

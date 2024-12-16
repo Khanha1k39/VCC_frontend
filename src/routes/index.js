@@ -29,8 +29,8 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/product",
-    page: ProductDetail,
+    path: "/product/page/:page",
+    page: HomePage,
     isShowHeader: true,
   },
   {

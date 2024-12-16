@@ -3,14 +3,27 @@ import CardComponent from "../../components/CardComponents/CardComponent";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProduct } from "../../services/ProductServices";
 import { useSelector } from "react-redux";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
+import { current } from "@reduxjs/toolkit";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 function HomePage() {
+  let { page } = useParams();
+  if (!page) {
+    page = 1;
+  }
+  const navigate = useNavigate();
   const product = useSelector((state) => {
     state.product;
   });
   const refSearch = useRef();
-  console.log("product", product);
+  // useEffect(() => {
+
+  //   if (refSearch.current) {
+  //     console.log("chay chay");
+  //   }
+  //   refSearch.current = true;
+  // }, [product?.search]);
 
   useEffect(() => {
     if (refSearch.current) {
@@ -18,14 +31,22 @@ function HomePage() {
     }
     refSearch.current = true;
   }, [product?.search]);
-  const fetProductAll = async () => {
-    const res = await getAllProduct();
+  const fetProductAll = async (page) => {
+    const res = await getAllProduct(page);
+    if (res?.status == "ok") {
+      // setPaginate({ ...paginate, total: res?.totalBook });
+    }
     return res;
   };
-  const { data: products, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetProductAll,
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["products", page],
+    queryFn: () => fetProductAll(page),
   });
+  const products = data;
+  console.log(products, products);
+  const onChange = (page, size) => {
+    navigate(`/product/page/${page}`);
+  };
   return (
     <div style={{ padding: "0 120px" }}>
       <div
@@ -43,9 +64,11 @@ function HomePage() {
             })}
           </Row>
           <Pagination
-            defaultCurrent={products?.pageCurrent}
+            defaultCurrent={page}
             total={products?.totalBook}
+            pageSize={8}
             style={{ justifyContent: "center", marginTop: "10px" }}
+            onChange={onChange}
           />
         </div>
       </div>
