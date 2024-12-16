@@ -15,6 +15,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useMutaionHook } from "../../hooks/useMutaionHook";
 import {
   createProduct,
+  deleteProduct,
   getAllProduct,
   getDerailsProduct,
   updateProduct,
@@ -23,10 +24,12 @@ import Loading from "../LoadingComponent/Loading";
 import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
+import ModalComponent from "../ModalComponent/ModalComponent";
 function AdminProduct() {
   const user = useSelector((state) => state.user);
-  const [drawerForm] = Form.useForm();
 
+  const [drawerForm] = Form.useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const fetchGetDetailsProduct = async (id) => {
@@ -50,12 +53,18 @@ function AdminProduct() {
     {
       title: "Title",
       dataIndex: "_id",
+      sorter: (a, b) => {
+        a.title.length - b.title.length;
+      },
       render: (text) => <strong>{text}</strong>,
     },
     {
       title: "Title",
       dataIndex: "title",
       render: (text) => <strong>{text}</strong>,
+      sorter: (a, b) => {
+        a.title.length - b.title.length;
+      },
     },
     {
       title: "Author",
@@ -93,6 +102,9 @@ function AdminProduct() {
       title: "Price",
       dataIndex: "price",
       render: (price) => `$${price.toFixed(2)}`,
+      sorter: (a, b) => {
+        return a.price - b.price;
+      },
     },
     {
       title: "Quantity Available",
@@ -102,6 +114,9 @@ function AdminProduct() {
       title: "Value",
       dataIndex: "value",
       render: (value) => `$${value.toFixed(2)}`,
+      sorter: (a, b) => {
+        return a.value - b.value;
+      },
     },
     {
       title: "Action",
@@ -109,7 +124,9 @@ function AdminProduct() {
       render: () => (
         <div>
           <DeleteOutlined
-            onClick={() => {}}
+            onClick={() => {
+              setIsDeleteModalOpen(true);
+            }}
             style={{ fontSize: "30px", color: "red" }}
           ></DeleteOutlined>
           <EditOutlined
@@ -181,6 +198,11 @@ function AdminProduct() {
     const res = updateProduct(id, token, rest?.data);
     return res;
   });
+  const mutationDelete = useMutaionHook(({ id, token }) => {
+    console.log("mutationDelete", id, token);
+    const res = deleteProduct(id, token);
+    return res;
+  });
   const { data, isError, isSuccess, isPending } = mutation;
   const {
     data: dataUpdate,
@@ -188,7 +210,13 @@ function AdminProduct() {
     isSuccess: isSuccessUpdate,
     isPending: isPendingUpdatde,
   } = mutationUpdate;
-  console.log("mutationupdate", mutationUpdate);
+  const {
+    data: dataDeleted,
+    isError: isErrorDeleted,
+    isSuccess: isSuccessDeleted,
+    isPending: isPendingDeleted,
+  } = mutationDelete;
+  console.log("isDeleteModal", isDeleteModalOpen);
 
   useEffect(() => {
     if (isSuccess && data?.status === "OK") {
@@ -205,11 +233,22 @@ function AdminProduct() {
       // drawerForm.resetFields();
       setIsOpenDrawer(false);
       console.log("isopen", isOpenDrawer);
-    } else if (isError) {
+    } else if (isErrorUpdate) {
       message.error();
     }
   }, [isSuccessUpdate]);
-
+  useEffect(() => {
+    if (isSuccessDeleted && dataDeleted?.status === "ok") {
+      message.success("Thành công");
+      // drawerForm.resetFields();
+      setIsDeleteModalOpen(false);
+    } else if (isErrorDeleted) {
+      message.error();
+    }
+  }, [isSuccessDeleted]);
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
   const onFinish = (values) => {
     mutation.mutate(values, {
       onSettled: () => {
@@ -231,7 +270,17 @@ function AdminProduct() {
       }
     );
   };
-
+  const handleDeleteProduct = () => {
+    mutationDelete.mutate(
+      { id: rowSelected, token: user?.access_token },
+      {
+        onSettled: () => {
+          refetch();
+        },
+      }
+    );
+    console.log("delete product");
+  };
   const getAllProducts = async () => {
     const res = await getAllProduct();
 
@@ -764,6 +813,18 @@ function AdminProduct() {
           </Form>
         </Loading>
       </DrawerComponent>
+
+      <Modal
+        // getContainer={false}
+        title="Xóa sản phẩm"
+        open={isDeleteModalOpen}
+        onOk={handleDeleteProduct}
+        onCancel={handleCancelDelete}
+      >
+        <Loading isLoading={isPendingDeleted}>
+          <div>Bạn có chắc xóa sản phẩm này không</div>
+        </Loading>
+      </Modal>
     </>
   );
 }
