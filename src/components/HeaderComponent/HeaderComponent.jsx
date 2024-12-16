@@ -16,12 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../services/UserServices";
 import { resetUser } from "../../redux/slides/userSlide";
 import { Navigate, useNavigate } from "react-router-dom";
+import { searchProduct } from "../../redux/slides/productSlide";
+import { useState } from "preact/hooks";
 
 function HeaderComponent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
   const user = useSelector((state) => state.user);
-
   const items =
     (user.isAdmin == true) == false
       ? [
@@ -48,8 +50,10 @@ function HeaderComponent() {
             label: <span>Đăng xuất</span>,
           },
         ];
-  console.log("is admin", user.isAdmin, items);
-
+  const onSearch = (e) => {
+    setSearch(e);
+    dispatch(searchProduct(e));
+  };
   return (
     <WrapperHeader gutter={16}>
       <Col span={6}>
@@ -66,7 +70,7 @@ function HeaderComponent() {
           allowClear
           enterButton="Search"
           size="large"
-          //   onSearch={() => {}}
+          onSearch={onSearch}
         />
       </Col>
       <Col

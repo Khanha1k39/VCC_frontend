@@ -2,8 +2,22 @@ import { Col, Pagination, Row } from "antd";
 import CardComponent from "../../components/CardComponents/CardComponent";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProduct } from "../../services/ProductServices";
+import { useSelector } from "react-redux";
+import { useEffect, useRef } from "preact/hooks";
 
 function HomePage() {
+  const product = useSelector((state) => {
+    state.product;
+  });
+  const refSearch = useRef();
+  console.log("product", product);
+
+  useEffect(() => {
+    if (refSearch.current) {
+      console.log("chay chay");
+    }
+    refSearch.current = true;
+  }, [product?.search]);
   const fetProductAll = async () => {
     const res = await getAllProduct();
     return res;

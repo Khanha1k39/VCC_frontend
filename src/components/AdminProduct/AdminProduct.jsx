@@ -15,6 +15,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useMutaionHook } from "../../hooks/useMutaionHook";
 import {
   createProduct,
+  deleteManyProduct,
   deleteProduct,
   getAllProduct,
   getDerailsProduct,
@@ -203,6 +204,20 @@ function AdminProduct() {
     const res = deleteProduct(id, token);
     return res;
   });
+  const mutationDeleteMany = useMutaionHook(({ ids, token }) => {
+    const res = deleteManyProduct(ids, token);
+    return res;
+  });
+  const handleDeleteManyProducts = (ids) => {
+    mutationDeleteMany.mutate(
+      { ids, token: user?.access_token },
+      {
+        onSettled: () => {
+          refetch();
+        },
+      }
+    );
+  };
   const { data, isError, isSuccess, isPending } = mutation;
   const {
     data: dataUpdate,
@@ -298,7 +313,7 @@ function AdminProduct() {
     return { ...product, key: product._id };
   });
   return (
-    <>
+    <Loading isLoading={false}>
       <Title level={5}>Quản lý sản phẩm </Title>
       <div style={{ marginTop: "10px" }}>
         <Button
@@ -317,6 +332,7 @@ function AdminProduct() {
         data={dataTable}
         isLoading={isLoadingAllProduct}
         columns={columns}
+        handleDeleteManyProducts={handleDeleteManyProducts}
         option={{
           onRow: (record, rowIndex) => {
             return {
@@ -825,7 +841,7 @@ function AdminProduct() {
           <div>Bạn có chắc xóa sản phẩm này không</div>
         </Loading>
       </Modal>
-    </>
+    </Loading>
   );
 }
 

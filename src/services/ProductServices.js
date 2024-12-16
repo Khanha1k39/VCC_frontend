@@ -34,4 +34,12 @@ export const deleteProduct = async (id, access_token) => {
   });
   return res.data;
 };
+export const deleteManyProduct = async (data, access_token) => {
+  const res = await axiosJWT.post(`${API_URL}/product/delete-many`, data, {
+    headers: {
+      token: `Beare ${access_token}`,
+    },
+  });
+  return res.data;
+};
 // router.put("/updatep-roduct/:id", productController.updateProduct);

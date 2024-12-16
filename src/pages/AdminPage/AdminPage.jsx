@@ -39,8 +39,8 @@ const getLevelKeys = (items1) => {
 };
 const levelKeys = getLevelKeys(items);
 function AdminPage() {
-  const [stateOpenKeys, setStateOpenKeys] = useState("user");
-  const [keySelected, setSelectedKey] = useState("user");
+  const [stateOpenKeys, setStateOpenKeys] = useState("product");
+  const [keySelected, setSelectedKey] = useState("product");
   const onOpenChange = (openKeys) => {
     const currentOpenKey = openKeys.find(
       (key) => stateOpenKeys.indexOf(key) === -1
@@ -78,7 +78,7 @@ function AdminPage() {
     <Flex gap={16}>
       <Menu
         mode="inline"
-        defaultSelectedKeys={"user"}
+        defaultSelectedKeys={"product"}
         openKeys={stateOpenKeys}
         onOpenChange={onOpenChange}
         style={{ width: 256, boxShadow: "1px 1px 2px #ccc", height: "100vh" }}
