@@ -15,7 +15,6 @@ import Title from "antd/es/typography/Title";
 import { getDiscountValue } from "../../comma/utils";
 
 function CardComponent({ book }) {
-  console.log(book);
   return (
     <Card
       hoverable

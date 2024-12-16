@@ -1,4 +1,4 @@
-import { Badge, Col, Row } from "antd";
+import { Badge, Button, Col, Dropdown, Flex, Popover, Row } from "antd";
 import {
   WrapperHeader,
   WrapperHeaderAccount,
@@ -12,7 +12,31 @@ import {
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../services/UserServices";
+import { resetUser } from "../../redux/slides/userSlide";
+import { Navigate, useNavigate } from "react-router-dom";
+const items = [
+  {
+    key: "1",
+    label: <span>Thông tin người dùng</span>,
+  },
+  {
+    key: "2",
+    label: <span>Đăng xuất</span>,
+  },
+];
+const content = (
+  <div>
+    <p>Thông tin người dùng</p>
+    <p>Đăng xuất</p>
+  </div>
+);
 function HeaderComponent() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  console.log(user);
   return (
     <WrapperHeader gutter={16}>
       <Col span={6}>
@@ -34,11 +58,35 @@ function HeaderComponent() {
         <WrapperHeaderAccount>
           <UserOutlined style={{ fontSize: "30px" }} />
           <div>
-            <WrapperTextHeaderSmall>Đăng nhập/đăng kí</WrapperTextHeaderSmall>
-            <div>
-              <WrapperTextHeaderSmall>Tài khoản</WrapperTextHeaderSmall>
-              <CaretDownOutlined></CaretDownOutlined>
-            </div>
+            {user?.name ? (
+              // <Popover content={content} trigger="click">
+              <Dropdown
+                menu={{
+                  items,
+                  onClick: async (e) => {
+                    if (e?.key == 2) {
+                      await logout();
+                      dispatch(resetUser());
+                    }
+                  },
+                }}
+              >
+                <Flex gap={4} style={{ cursor: "pointer" }}>
+                  <WrapperTextHeaderSmall>{user.name}</WrapperTextHeaderSmall>
+                  <CaretDownOutlined></CaretDownOutlined>
+                </Flex>
+              </Dropdown>
+            ) : (
+              // </Popover>
+              <WrapperTextHeaderSmall
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigate("/sign-in");
+                }}
+              >
+                Đăng nhập/đăng kí
+              </WrapperTextHeaderSmall>
+            )}
           </div>
         </WrapperHeaderAccount>
         <div>

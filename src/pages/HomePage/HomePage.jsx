@@ -12,7 +12,6 @@ function HomePage() {
     queryKey: ["products"],
     queryFn: fetProductAll,
   });
-  console.log(products, isLoading);
   return (
     <div style={{ padding: "0 120px" }}>
       <div
