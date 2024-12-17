@@ -4,8 +4,9 @@ import { Space, Typography } from "antd";
 import { useParams } from "react-router-dom";
 import { getDerailsProduct } from "../../services/ProductServices";
 import { useQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../components/LoadingComponent/Loading";
+import { addOrderProduct } from "../../redux/slides/orderSlide";
 const { Text, Link } = Typography;
 function ProductDetail() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ function ProductDetail() {
   //   enabled: !!id,
   // });
   // console.log("detail", detailProduct);
+
   const transferTypetoTitle = (type) => {
     switch (type) {
       case "genre":
@@ -55,6 +57,20 @@ function ProductDetail() {
   console.log(data?.data);
   const metaDataArray = Object.entries(data?.data?.meta_data || {});
   console.log(metaDataArray);
+  const dispatch = useDispatch();
+  const handleAddOrderProduct = () => {
+    dispatch(
+      addOrderProduct({
+        orderItems: {
+          name: data?.data?.title,
+          amount: 1,
+          image: data?.data?.image_url,
+          price: data?.data?.value,
+          product: data?.data?._id,
+        },
+      })
+    );
+  };
   return (
     <Loading isLoading={isLoading}>
       <div
@@ -91,8 +107,12 @@ function ProductDetail() {
             >
               <Flex justify="space-between" align="center">
                 <Title level={2}>{`${data?.data?.title}`}</Title>
-                <Button type="primary" style={{ padding: "10px 24px" }}>
-                  Thêm vào giỏ hàng{" "}
+                <Button
+                  onClick={handleAddOrderProduct}
+                  type="primary"
+                  style={{ padding: "10px 24px" }}
+                >
+                  Thêm vào giỏ hàng
                 </Button>
               </Flex>
               <div

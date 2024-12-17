@@ -68,6 +68,7 @@ function TableComponent(props) {
           {...option}
           columns={columns}
           dataSource={data}
+          pagination={false}
         />
       </Loading>
     </div>

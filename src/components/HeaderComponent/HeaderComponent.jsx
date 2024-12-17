@@ -20,6 +20,8 @@ import { searchProduct } from "../../redux/slides/productSlide";
 import { useState } from "preact/hooks";
 
 function HeaderComponent() {
+  const order = useSelector((state) => state.order);
+  console.log("order", order);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
@@ -91,7 +93,7 @@ function HeaderComponent() {
                       dispatch(resetUser());
                     }
                     if (e?.key == 3) {
-                      navigate("/system/admin");
+                      navigate("/system/admin/product");
                     }
                   },
                 }}
@@ -114,8 +116,13 @@ function HeaderComponent() {
             )}
           </div>
         </WrapperHeaderAccount>
-        <div>
-          <Badge count={1}>
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            navigate("/order");
+          }}
+        >
+          <Badge count={order?.orderItems?.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "30px", color: "#fff" }}
             ></ShoppingCartOutlined>

@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import AdminUser from "../../components/AdminUser/AdminUser";
 import AdminProduct from "../../components/AdminProduct/AdminProduct";
+import { useNavigate, useParams } from "react-router-dom";
 
 const items = [
   {
@@ -39,8 +40,10 @@ const getLevelKeys = (items1) => {
 };
 const levelKeys = getLevelKeys(items);
 function AdminPage() {
-  const [stateOpenKeys, setStateOpenKeys] = useState("product");
-  const [keySelected, setSelectedKey] = useState("product");
+  const { id } = useParams();
+  const [stateOpenKeys, setStateOpenKeys] = useState(id);
+  const [keySelected, setSelectedKey] = useState(id);
+  const navigate = useNavigate();
   const onOpenChange = (openKeys) => {
     const currentOpenKey = openKeys.find(
       (key) => stateOpenKeys.indexOf(key) === -1
@@ -63,6 +66,7 @@ function AdminPage() {
   };
   const handleOnClick = ({ key }) => {
     setSelectedKey(key);
+    navigate(`/system/admin/${key}`);
   };
   const render = (key) => {
     switch (key) {

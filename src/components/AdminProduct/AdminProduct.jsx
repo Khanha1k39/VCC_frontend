@@ -8,6 +8,7 @@ import {
   InputNumber,
   message,
   Modal,
+  Pagination,
 } from "antd";
 import TableComponent from "../TableComponents/TableComponent";
 import { useEffect, useState } from "preact/hooks";
@@ -26,7 +27,13 @@ import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
 import ModalComponent from "../ModalComponent/ModalComponent";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 function AdminProduct() {
+  const navigate = useNavigate();
+  let { page } = useParams();
+  if (!page) {
+    page = 1;
+  }
   const user = useSelector((state) => state.user);
 
   const [drawerForm] = Form.useForm();
@@ -296,22 +303,27 @@ function AdminProduct() {
     );
     console.log("delete product");
   };
-  const getAllProducts = async () => {
-    const res = await getAllProduct();
-
+  const getAllProducts = async (page) => {
+    const res = await getAllProduct(page);
+    if (res?.status == "ok") {
+    }
     return res;
   };
+
   const {
     isLoading: isLoadingAllProduct,
     data: allProduct,
     refetch, // Hàm để gọi lại request
   } = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
+    queryKey: ["products", page],
+    queryFn: () => getAllProducts(page),
   });
   const dataTable = allProduct?.data?.map((product) => {
     return { ...product, key: product._id };
   });
+  const onChange = (page, size) => {
+    navigate(`/system/admin/product/${page}`);
+  };
   return (
     <Loading isLoading={false}>
       <Title level={5}>Quản lý sản phẩm </Title>
@@ -841,6 +853,13 @@ function AdminProduct() {
           <div>Bạn có chắc xóa sản phẩm này không</div>
         </Loading>
       </Modal>
+      <Pagination
+        defaultCurrent={page}
+        total={allProduct?.totalBook}
+        pageSize={8}
+        style={{ justifyContent: "center", marginTop: "10px" }}
+        onChange={onChange}
+      />
     </Loading>
   );
 }

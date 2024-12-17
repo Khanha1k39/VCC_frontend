@@ -44,11 +44,18 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/system/admin",
+    path: "/system/admin/:id",
     page: AdminPage,
     isShowHeader: true,
     isPrivate: true,
   },
+  {
+    path: "/system/admin/:id/:page",
+    page: AdminPage,
+    isShowHeader: true,
+    isPrivate: true,
+  },
+
   {
     path: "*",
     page: NotFoundPage,
