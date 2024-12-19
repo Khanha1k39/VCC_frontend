@@ -1,4 +1,6 @@
 import AdminPage from "../pages/AdminPage/AdminPage";
+import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
+import SuccessOrder from "../pages/CheckoutPage/CheckoutSuccess";
 import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import OrderPage from "../pages/OrderPage/OrderPage";
@@ -34,8 +36,18 @@ export const routes = [
     isShowHeader: true,
   },
   {
+    path: "/order/success/:id",
+    page: SuccessOrder,
+    isShowHeader: false,
+  },
+  {
     path: "/profile",
     page: ProfilePage,
+    isShowHeader: true,
+  },
+  {
+    path: "/checkout",
+    page: CheckoutPage,
     isShowHeader: true,
   },
   {

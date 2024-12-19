@@ -1,6 +1,6 @@
 import Title from "antd/es/typography/Title";
 import { WrapperContainer } from "./styles";
-import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
+import { Button, Checkbox, Flex, Form, Input, message, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import Loading from "../../components/LoadingComponent/Loading";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/slides/userSlide";
+import { Bounce, toast } from "react-toastify";
+
 function SignInPage() {
   const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -19,10 +21,14 @@ function SignInPage() {
   };
   const mutation = useMutaionHook((data) => loginUser(data));
   const { data, isPending, isError, isSuccess } = mutation;
+  console.log("mutation", mutation);
   const onFinish = (values) => {
-    mutation.mutate(values);
-
-    console.log("Success:", values);
+    mutation.mutate(values, {
+      onError: (error) => {
+        console.log("error", error);
+        message.error(error?.response?.data?.message);
+      },
+    });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -80,7 +86,7 @@ function SignInPage() {
             />
           </Form.Item>
           <Form.Item>
-            <Loading isLoading={isPending}>
+            <Loading isLoading={false}>
               <Button block type="primary" htmlType="submit">
                 Đăng nhập
               </Button>

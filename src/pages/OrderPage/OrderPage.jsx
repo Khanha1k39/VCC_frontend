@@ -1,11 +1,15 @@
-import { Button, Col, Divider, Row, Table, Typography } from "antd";
+import { Button, Col, Divider, message, Row, Table, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   decreaseOrderAmount,
   increaseOrderAmount,
 } from "../../redux/slides/orderSlide";
+import { Navigate, useNavigate } from "react-router-dom";
+import { checkQuantityStock } from "../../services/OrderServices";
+import { useMutaionHook } from "../../hooks/useMutaionHook";
 
 function OrderPage() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const formatCurrency = (value) =>
     new Intl.NumberFormat("vi-VN", {
@@ -33,7 +37,6 @@ function OrderPage() {
       dataIndex: "name",
       key: "name",
       render: (text, record) => {
-        console.log("text,record", text, record);
         return (
           <div style={{ display: "flex", alignItems: "center" }}>
             <img
@@ -91,6 +94,21 @@ function OrderPage() {
       (total, item) => total + item.price * item.amount,
       0
     );
+  };
+  const mutationCheckQuantity = useMutaionHook((data) => {
+    const res = checkQuantityStock(data);
+    return res;
+  });
+
+  const handleCheckout = () => {
+    mutationCheckQuantity.mutate(order, {
+      onError: (err) => {
+        message.error(err?.response?.data?.message);
+      },
+      onSuccess: (e) => {
+        navigate("/checkout");
+      },
+    });
   };
   return (
     <div
@@ -181,6 +199,7 @@ function OrderPage() {
               fontSize: "16px",
               height: "45px",
             }}
+            onClick={handleCheckout}
           >
             Thanh toán ngay
           </Button>

@@ -21,6 +21,7 @@
     "preact": "^10.25.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.27.0",
+    "react-toastify": "^11.0.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.1.13"
   },
